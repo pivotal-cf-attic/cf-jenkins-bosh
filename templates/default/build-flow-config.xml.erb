@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<com.cloudbees.plugins.flow.BuildFlow plugin="build-flow-plugin@0.10">
+  <actions/>
+  <description><![CDATA[<%= @build_description %>]]></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+  <% if @build_parameters %>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <% @build_parameters.each do |name, opts| %>
+        <hudson.model.StringParameterDefinition>
+          <name><%= name %></name>
+          <description><%= opts[:description] %></description>
+          <defaultValue><%= opts[:default] %></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <% end %>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  <% end %>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url><%= @build_repo %></url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name><%= @build_repo_branch %></name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <% if @build_repo_directory %>
+      <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+        <relativeTargetDir><%= @build_repo_directory %></relativeTargetDir>
+      </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+      <% end %>
+      <% if @build_update_submodules %>
+      <hudson.plugins.git.extensions.impl.SubmoduleOption>
+        <disableSubmodules>false</disableSubmodules>
+        <recursiveSubmodules>true</recursiveSubmodules>
+      </hudson.plugins.git.extensions.impl.SubmoduleOption>
+      <% end %>
+    </extensions>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled><%= @build_disabled %></disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <% if @build_timer_trigger %>
+    <hudson.triggers.TimerTrigger>
+      <spec><%= @build_timer_trigger %></spec>
+    </hudson.triggers.TimerTrigger>
+    <% end %>
+    <% if @build_scm_trigger %>
+    <hudson.triggers.SCMTrigger>
+      <spec><%= @build_scm_trigger %></spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+    <% end %>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders/>
+  <publishers>
+    <% if @build_triggers %>
+    <% @build_triggers.each do |trigger| %>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.21">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <% if trigger[:parameters] %>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties><![CDATA[<%= trigger[:parameters] %>]]></properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            <% end %>
+          </configs>
+          <projects><%= trigger[:projects] %></projects>
+          <condition><%= trigger[:condition] %></condition>
+          <triggerWithNoParameters><%= !trigger[:parameters] %></triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+    <% end %>
+    <% end %>
+  </publishers>
+  <buildWrappers>
+    <% if @build_timeout_percentage && @build_timeout_default %>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.12.2">
+      <strategy class="hudson.plugins.build_timeout.impl.ElasticTimeOutStrategy">
+        <timeoutPercentage><%= @build_timeout_percentage %></timeoutPercentage>
+        <numberOfBuilds>3</numberOfBuilds>
+        <timeoutMinutesElasticDefault><%= @build_timeout_default %></timeoutMinutesElasticDefault>
+      </strategy>
+      <failBuild>true</failBuild>
+      <writingDescription>false</writingDescription>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+    <% end %>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.3.1">
+      <colorMapName>xterm</colorMapName>
+    </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+  </buildWrappers>
+  <icon/>
+  <dsl><![CDATA[<%= @build_flow_dsl %>]]></dsl>
+</com.cloudbees.plugins.flow.BuildFlow>
