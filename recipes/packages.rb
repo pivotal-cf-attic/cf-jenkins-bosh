@@ -14,3 +14,8 @@ package 'libcurl4-openssl-dev'
 
 # cloud_controller_ng:
 package 'libpq-dev'
+package 'libmysqlclient-dev'
+package 'libsqlite3-dev'
+
+# for installing bzr go dependencies (for spiff)
+package 'bzr'
