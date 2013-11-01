@@ -47,7 +47,7 @@
     </extensions>
   </scm>
   <canRoam>true</canRoam>
-  <disabled><%= @build_disabled %></disabled>
+  <disabled><%= @build_disabled || false %></disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
