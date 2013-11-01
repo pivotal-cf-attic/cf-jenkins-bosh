@@ -25,6 +25,6 @@ node['cf_jenkins']['jobs'].each do |job_settings|
     group node['jenkins']['server']['user']
     mode 00644
     variables job_settings[:build_vars]
-    notifies(:update, resources(jenkins_job: job_settings[:name]), :immediately)
+    notifies(:update, resources("jenkins_job[#{job_settings[:name]}]"), :immediately)
   end
 end
