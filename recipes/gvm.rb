@@ -25,5 +25,11 @@ end
 
 file '/etc/profile.d/gvm.sh' do
   mode 0755
-  content %Q{#!/bin/sh\n\n[[ -s "#{gvm_script}" ]] && . "#{gvm_script}"\n}
+  content <<-EOF
+#!/bin/sh
+
+export GVM_ROOT="#{gvm_destination}/gvm"
+
+[[ -s "$GVM_ROOT/scripts/gvm" ]] && . "$GVM_ROOT/scripts/gvm"
+EOF
 end
