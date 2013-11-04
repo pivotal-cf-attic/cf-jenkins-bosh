@@ -1,0 +1,86 @@
+SITE
+  remote: http://community.opscode.com/api/v1
+  specs:
+    apache2 (1.8.4)
+    apt (2.3.0)
+    ark (0.4.0)
+    aws (1.0.0)
+    bluepill (2.3.0)
+      rsyslog (>= 0.0.0)
+    build-essential (1.4.2)
+    chef_handler (1.1.4)
+    chruby_install (0.1.1)
+      build-essential (>= 0.0.0)
+    iptables (0.12.0)
+    java (1.15.0)
+      aws (>= 0.0.0)
+      windows (>= 0.0.0)
+    jenkins (1.2.2)
+      apache2 (>= 0.0.0)
+      apt (>= 0.0.0)
+      iptables (>= 0.0.0)
+      java (>= 0.0.0)
+      nginx (>= 0.0.0)
+      runit (>= 1.0.0)
+      yum (>= 0.0.0)
+    nginx (2.0.0)
+      apt (~> 2.2)
+      bluepill (~> 2.3)
+      build-essential (~> 1.4)
+      ohai (~> 1.1)
+      runit (~> 1.2)
+      yum (~> 2.3)
+    ohai (1.1.12)
+    rsyslog (1.9.0)
+    ruby_install (0.1.0)
+      apt (>= 0.0.0)
+      ark (>= 0.0.0)
+      yum (>= 0.0.0)
+    runit (1.3.0)
+      build-essential (>= 0.0.0)
+      yum (>= 0.0.0)
+    windows (1.11.0)
+      chef_handler (>= 0.0.0)
+    yum (2.4.0)
+
+GIT
+  remote: https://github.com/cgravier/selfsigned_certificate
+  ref: master
+  sha: 92df9a07099ab0aa425da6f33dcaf1e44e436a1f
+  specs:
+    selfsigned_certificate (0.1.0)
+
+GIT
+  remote: https://github.com/ichilton/chef_chruby_install
+  ref: master
+  sha: 206f123678943d6ec56a2e7914eb7bab3f3c6bf5
+  specs:
+    chef_chruby_install (0.1.1)
+      build-essential (>= 0.0.0)
+
+GIT
+  remote: https://github.com/ichilton/chef_rubies
+  ref: master
+  sha: 6568cedef26eb4507bdcc458b709be5bfadfff25
+  specs:
+    chef_rubies (0.1.0)
+      build-essential (>= 0.0.0)
+      chruby_install (>= 0.0.0)
+      ruby_install (>= 0.0.0)
+
+PATH
+  remote: .
+  specs:
+    cf-jenkins (0.0.1)
+      apt (>= 0.0.0)
+      chef_rubies (>= 0.0.0)
+      jenkins (>= 0.0.0)
+      selfsigned_certificate (>= 0.0.0)
+
+DEPENDENCIES
+  cf-jenkins (>= 0)
+  chef_chruby_install (>= 0)
+  chef_rubies (>= 0)
+  jenkins (>= 0)
+  selfsigned_certificate (>= 0)
+
