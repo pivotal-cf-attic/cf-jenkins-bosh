@@ -18,13 +18,8 @@ file ::File.join(node['jenkins']['server']['home'], '.ssh', 'id_rsa.pub') do
   content node['cf_jenkins']['ssh_key_pub']
 end
 
-node['cf_jenkins']['ssh_known_hosts'].each do |known_host|
-  execute "add #{known_host} to known hosts if necessary" do
-    known_hosts = ::File.join(node['jenkins']['server']['home'], '.ssh', 'known_hosts')
-    command "echo '#{known_host}' >> #{known_hosts}"
-    user node['jenkins']['server']['user']
-    group node['jenkins']['server']['user']
-
-    not_if { "grep '#{known_host}' #{known_hosts}" }
-  end
+file ::File.join(node['jenkins']['server']['home'], '.ssh', 'known_hosts') do
+  user node['jenkins']['server']['user']
+  group node['jenkins']['server']['user']
+  content node['cf_jenkins']['ssh_known_hosts'].join("\n")
 end
