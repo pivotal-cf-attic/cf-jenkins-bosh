@@ -12,4 +12,6 @@ RSpec.configure do |config|
   ### ChefSpec ###
 
   config.cookbook_path = YAML.load_file(File.join(PROJECT_ROOT, '.librarian', 'chef', 'config'))['LIBRARIAN_CHEF_PATH']
+  config.platform = 'ubuntu'
+  config.version = '12.04'
 end
