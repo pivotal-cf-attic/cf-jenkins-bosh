@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'librarian-chef'
+gem 'foodcritic'
 
 group :integration do
   gem 'test-kitchen', '1.0.0.beta.4'

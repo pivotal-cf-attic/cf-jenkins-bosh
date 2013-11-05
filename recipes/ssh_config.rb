@@ -19,12 +19,12 @@ file ::File.join(node['jenkins']['server']['home'], '.ssh', 'id_rsa.pub') do
 end
 
 node['cf_jenkins']['ssh_known_hosts'].each do |known_host|
-  execute 'add github to known hosts if necessary' do
+  execute "add #{known_host} to known hosts if necessary" do
     known_hosts = ::File.join(node['jenkins']['server']['home'], '.ssh', 'known_hosts')
     command "echo '#{known_host}' >> #{known_hosts}"
     user node['jenkins']['server']['user']
     group node['jenkins']['server']['user']
 
-    not_if "grep '#{known_host}' #{known_hosts}"
+    not_if { "grep '#{known_host}' #{known_hosts}" }
   end
 end
