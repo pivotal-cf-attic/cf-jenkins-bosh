@@ -7,6 +7,7 @@ package 'libxml2-dev'
 
 # for yetis
 package 'maven'
+package 'zip'
 
 # various libs for bundle package during release creation
 # dea_next:
