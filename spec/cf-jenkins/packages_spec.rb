@@ -1,24 +1,18 @@
 require 'spec_helper'
 
 describe 'cf-jenkins::packages' do
-  let(:chef_run) { ChefSpec::Runner.new.converge(described_recipe) }
+  subject(:chef_run) { ChefSpec::Runner.new.converge(described_recipe) }
 
-  [
-    'curl',
-    'htop',
-    'vim',
-    'libxslt-dev',
-    'libxml2-dev',
-    'maven',
-    'zip',
-    'libcurl4-openssl-dev',
-    'libpq-dev',
-    'libmysqlclient-dev',
-    'libsqlite3-dev',
-    'bzr',
-  ].each do |package|
-    it "installs #{package}" do
-      expect(chef_run).to install_package(package)
-    end
-  end
+  it { should install_package('curl') }
+  it { should install_package('htop') }
+  it { should install_package('vim') }
+  it { should install_package('libxslt-dev') }
+  it { should install_package('libxml2-dev') }
+  it { should install_package('maven') }
+  it { should install_package('zip') }
+  it { should install_package('libcurl4-openssl-dev') }
+  it { should install_package('libpq-dev') }
+  it { should install_package('libmysqlclient-dev') }
+  it { should install_package('libsqlite3-dev') }
+  it { should install_package('bzr') }
 end
