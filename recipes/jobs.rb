@@ -1,3 +1,8 @@
+service 'jenkins' do
+  action :restart
+  notifies :create, 'ruby_block[block_until_operational]', :immediately
+end
+
 node['cf_jenkins']['jobs'].each do |job_settings|
   job_dir = ::File.join(node['jenkins']['server']['home'], 'jobs', job_settings[:name])
   job_config = ::File.join(job_dir, 'config.xml')
