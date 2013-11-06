@@ -11,26 +11,21 @@ aws_ebs_volume "db_ebs_volume" do
   volume_id node['aws']['ebs_volume_id']
   device "/dev/sdi"
   action :attach
-  notifies :run, 'execute[format drive]', :immediately
 end
 
 execute "format drive" do
   command "mkfs -t ext4 /dev/xvdi"
   not_if "file -s /dev/xvdi | grep ext4"
-  action :nothing
-  notifies :create, 'directory[/mnt/jenkins]', :immediately
 end
 
-directory "/mnt/jenkins" do
+directory node[:jenkins][:server][:home] do
   owner "root"
   group "root"
   mode 00644
-  action :nothing
-  notifies :enable, 'mount[/mnt/jenkins]', :immediately
 end
 
-mount "/mnt/jenkins" do
+mount node[:jenkins][:server][:home] do
   device "/dev/xvdi"
   fstype "ext4"
-  action :nothing
+  action [:mount, :enable]
 end
