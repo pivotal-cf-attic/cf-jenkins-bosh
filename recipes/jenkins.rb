@@ -8,3 +8,11 @@ end
 
 include_recipe 'jenkins::server'
 include_recipe 'jenkins::proxy'
+
+service 'jenkins' do
+  action :restart
+  notifies :create, 'ruby_block[block_until_operational]', :immediately
+end
+
+include_recipe 'cf-jenkins::plugins'
+include_recipe 'cf-jenkins::jobs'

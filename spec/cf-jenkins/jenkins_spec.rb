@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'cf-jenkins::jenkins' do
-  subject(:chef_run) { ChefSpec::Runner.new.converge(described_recipe) }
+  subject(:chef_run) { ChefSpec::Runner.new.converge(described_recipe, 'cf-jenkins::_test_stubs') }
 
   before do
     Chef::Cookbook::Metadata.any_instance.stub(:depends) # ignore external cookbook dependencies
@@ -22,4 +22,6 @@ describe 'cf-jenkins::jenkins' do
   it { expect(chef_run).to include_recipe('selfsigned_certificate') }
   it { expect(chef_run).to include_recipe('jenkins::server') }
   it { expect(chef_run).to include_recipe('jenkins::proxy') }
+  it { expect(chef_run).to include_recipe('cf-jenkins::plugins') }
+  it { expect(chef_run).to include_recipe('cf-jenkins::jobs') }
 end

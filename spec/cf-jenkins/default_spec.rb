@@ -22,5 +22,4 @@ describe 'cf-jenkins::default' do
   it { expect(chef_run).to include_recipe('cf-jenkins::gvm') }
   it { expect(chef_run).to include_recipe('cf-jenkins::ssh_config') }
   it { expect(chef_run).to include_recipe('cf-jenkins::packages') }
-  it { expect(chef_run).to include_recipe('cf-jenkins::jobs') }
 end

@@ -1,31 +1,31 @@
-aws_elastic_ip "runtime prod jenkins" do
+aws_elastic_ip 'jenkins ip' do
   aws_access_key node['aws']['access_key']
   aws_secret_access_key node['aws']['secret_access_key']
   ip node['aws']['elastic_ip']
   action :associate
 end
 
-aws_ebs_volume "db_ebs_volume" do
+aws_ebs_volume 'jenkins_ebs_home' do
   aws_access_key node['aws']['access_key']
   aws_secret_access_key node['aws']['secret_access_key']
   volume_id node['aws']['ebs_volume_id']
-  device "/dev/sdi"
+  device '/dev/sdi'
   action :attach
 end
 
-execute "format drive" do
-  command "mkfs -t ext4 /dev/xvdi"
-  not_if "file -s /dev/xvdi | grep ext4"
+execute 'format drive' do
+  command 'mkfs -t ext4 /dev/xvdi'
+  not_if 'file -s /dev/xvdi | grep ext4'
 end
 
 directory node[:jenkins][:server][:home] do
-  owner "root"
-  group "root"
+  owner 'root'
+  group 'root'
   mode 00644
 end
 
 mount node[:jenkins][:server][:home] do
-  device "/dev/xvdi"
-  fstype "ext4"
+  device '/dev/xvdi'
+  fstype 'ext4'
   action [:mount, :enable]
 end
