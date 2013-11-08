@@ -13,9 +13,10 @@ RSpec.configure do |config|
   config.order = 'random' # Run specs in random order to surface order dependencies.
 
   ### ChefSpec ###
-  config.include(CustomChefSpecMatchers)
-
+  config.before(:suite) { system("cd #{PROJECT_ROOT} && librarian-chef install --quiet") }
   config.cookbook_path = YAML.load_file(File.join(PROJECT_ROOT, '.librarian', 'chef', 'config'))['LIBRARIAN_CHEF_PATH']
   config.platform = 'ubuntu'
   config.version = '12.04'
+
+  config.include(CustomChefSpecMatchers)
 end
