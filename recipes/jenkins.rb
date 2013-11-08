@@ -11,15 +11,16 @@ end
 include_recipe 'jenkins::server'
 include_recipe 'jenkins::proxy'
 
-service 'jenkins' do
-  action :restart
-  notifies :create, 'ruby_block[block_until_operational]', :immediately
-end
-
 user 'jenkins' do
   shell '/bin/bash'
   action :modify
 end
 
 include_recipe 'cf-jenkins::plugins'
+
+service 'jenkins' do
+  action :restart
+  notifies :create, 'ruby_block[block_until_operational]', :immediately
+end
+
 include_recipe 'cf-jenkins::jobs'
