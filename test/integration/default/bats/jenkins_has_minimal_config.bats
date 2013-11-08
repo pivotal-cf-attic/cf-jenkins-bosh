@@ -4,17 +4,16 @@
   while true; do
     curl -s http://localhost:8080/job/dummy_job/api/json > /tmp/job.json
 
-    build_status=1
+    build_status="Build failed."
     if grep --silent -v '"color":"notbuilt"' /tmp/job.json; then
-      if grep --silent '"color":"red"' /tmp/job.json; then
-        echo "Build failed."
-      else
-        echo "Build succeeded."
-        build_status=0
+      if grep --silent -v '"color":"red"' /tmp/job.json; then
+        build_status="Build succeeded."
       fi
       break;
     fi
   done
 
-  return ${build_status}
+  curl -s http://localhost:8080/job/dummy_job/lastBuild/consoleText # info for debugging displays on failure
+
+  [ "${build_status}" = "Build succeeded." ]
 }
