@@ -3,7 +3,6 @@ require 'yaml'
 PROJECT_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
 Dir.glob(File.join(PROJECT_ROOT, 'spec', 'support', '*.rb')).each do |support_file|
-  puts "loading #{support_file}"
   require support_file
 end
 

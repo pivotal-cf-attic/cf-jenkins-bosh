@@ -1,6 +1,5 @@
 require 'chefspec'
 
-puts 'in CustomChefSpecMatchers'
 module CustomChefSpecMatchers
   def associate_aws_elastic_ip(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:aws_elastic_ip, :associate, resource_name)
