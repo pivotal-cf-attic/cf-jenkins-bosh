@@ -14,5 +14,10 @@ service 'jenkins' do
   notifies :create, 'ruby_block[block_until_operational]', :immediately
 end
 
+user 'jenkins' do
+  shell '/bin/bash'
+  action :modify
+end
+
 include_recipe 'cf-jenkins::plugins'
 include_recipe 'cf-jenkins::jobs'
