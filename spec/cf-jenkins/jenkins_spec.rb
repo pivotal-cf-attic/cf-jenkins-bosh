@@ -23,6 +23,7 @@ describe 'cf-jenkins::jenkins' do
     expect(chef_run).to modify_user('jenkins').with(shell: '/bin/bash')
   end
   it { expect(chef_run).to include_recipe('selfsigned_certificate') }
+  it { expect(chef_run).to include_recipe('cf-jenkins::aws') }
   it { expect(chef_run).to include_recipe('jenkins::server') }
   it { expect(chef_run).to include_recipe('jenkins::proxy') }
   it { expect(chef_run).to include_recipe('cf-jenkins::plugins') }
