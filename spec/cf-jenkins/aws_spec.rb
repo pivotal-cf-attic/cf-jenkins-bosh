@@ -24,34 +24,64 @@ describe 'cf-jenkins::aws' do
       {
         'access_key' => 'ACCESS_KEY',
         'secret_access_key' => 'SECRET_ACCESS_KEY',
-        'elastic_ip' => 'ELASTIC_IP',
       }
     end
 
-    before do
-      stub_command('file -s /dev/xvdi | grep ext4').and_return(formatted?)
+    it { should_not associate_aws_elastic_ip('jenkins ip') }
+    it { should_not attach_aws_ebs_volume('jenkins_ebs_home') }
+    it { should_not run_execute('format drive') }
+    it { should_not create_directory(jenkins_home) }
+    it { should_not enable_mount(jenkins_home) }
+
+    context 'when node.aws.elastic_ip is set' do
+      let(:aws_config) do
+        {
+          'access_key' => 'ACCESS_KEY',
+          'secret_access_key' => 'SECRET_ACCESS_KEY',
+          'elastic_ip' => 'ELASTIC_IP',
+        }
+      end
+
+      it { should associate_aws_elastic_ip('jenkins ip').
+                    with(aws_access_key: aws_access_key,
+                         aws_secret_access_key: aws_secret_access_key,
+                         ip: 'ELASTIC_IP') }
+      it { should_not attach_aws_ebs_volume('jenkins_ebs_home') }
+      it { should_not run_execute('format drive') }
+      it { should_not create_directory(jenkins_home) }
+      it { should_not enable_mount(jenkins_home) }
     end
 
-    let(:formatted?) { true }
+    context 'when node.aws.ebs_volume_id is set' do
+      let(:aws_config) do
+        {
+          'access_key' => 'ACCESS_KEY',
+          'secret_access_key' => 'SECRET_ACCESS_KEY',
+          'ebs_volume_id' => 'EBS_VOLUME_ID',
+        }
+      end
+      let(:formatted?) { true }
 
-    it { should associate_aws_elastic_ip('jenkins ip').
-                  with(aws_access_key: aws_access_key,
-                       aws_secret_access_key: aws_secret_access_key,
-                       ip: chef_run.node['aws']['elastic_ip']) }
+      before do
+        stub_command('file -s /dev/xvdi | grep ext4').and_return(formatted?)
+      end
 
-    it { should attach_aws_ebs_volume('jenkins_ebs_home').
-                  with(aws_access_key: aws_access_key,
-                       aws_secret_access_key: aws_secret_access_key,
-                       device: '/dev/sdi') }
+      it { should_not associate_aws_elastic_ip('jenkins ip') }
 
-    it { should_not run_execute('format drive').with(command: 'mkfs -t ext4 /dev/xvdi') }
-    it { should create_directory(jenkins_home).with(owner: 'root', group: 'root', mode: 00644) }
-    it { should enable_mount(jenkins_home).with(device: '/dev/xvdi', fstype: 'ext4') }
+      it { should attach_aws_ebs_volume('jenkins_ebs_home').
+                    with(aws_access_key: aws_access_key,
+                         aws_secret_access_key: aws_secret_access_key,
+                         volume_id: 'EBS_VOLUME_ID',
+                         device: '/dev/sdi') }
+      it { should_not run_execute('format drive').with(command: 'mkfs -t ext4 /dev/xvdi') }
+      it { should create_directory(jenkins_home).with(owner: 'root', group: 'root', mode: 00644) }
+      it { should enable_mount(jenkins_home).with(device: '/dev/xvdi', fstype: 'ext4') }
 
-    context 'when the drive is NOT formatted' do
-      let(:formatted?) { false }
+      context 'when the drive is NOT formatted' do
+        let(:formatted?) { false }
 
-      it { should run_execute('format drive').with(command: 'mkfs -t ext4 /dev/xvdi') }
+        it { should run_execute('format drive').with(command: 'mkfs -t ext4 /dev/xvdi') }
+      end
     end
   end
 end
