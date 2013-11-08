@@ -19,4 +19,5 @@ RSpec.configure do |config|
   config.version = '12.04'
 
   config.include(CustomChefSpecMatchers)
+  config.include(ChefSpecHelper)
 end
