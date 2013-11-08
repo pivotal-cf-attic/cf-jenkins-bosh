@@ -1,4 +1,6 @@
 if node['aws']['access_key'] && node['aws']['secret_access_key']
+  include_recipe 'aws'
+
   if node['aws']['elastic_ip']
     aws_elastic_ip 'jenkins ip' do
       aws_access_key node['aws']['access_key']

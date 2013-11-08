@@ -27,6 +27,12 @@ describe 'cf-jenkins::aws' do
       }
     end
 
+    before do
+      Chef::Recipe.any_instance.stub(:require).with('right_aws')
+    end
+
+    it { should include_recipe('aws')}
+
     it { should_not associate_aws_elastic_ip('jenkins ip') }
     it { should_not attach_aws_ebs_volume('jenkins_ebs_home') }
     it { should_not run_execute('format drive') }
