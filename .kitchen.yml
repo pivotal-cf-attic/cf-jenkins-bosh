@@ -16,11 +16,13 @@ suites:
   run_list:
   - recipe[cf-jenkins]
   attributes:
-    cf_jenkins:
-      ssh_known_hosts: []
-      jobs: []
     rubies:
-      list: []
+      list:
+      - 'ruby 1.9.3-p448'
+      install_bundler: true
+    chruby_install:
+      default_ruby: '1.9.3-p448'
+      auto: false
     selfsigned_certificate:
       destination: /usr/var/ssl/certs/
       sslpassphrase: changeme
@@ -31,3 +33,29 @@ suites:
       depart: DE
       cn: CN
       email: EMAIL
+    cf_jenkins:
+      ssh_known_hosts: []
+      jobs:
+      - name: dummy_job
+        build_vars:
+          build_repo: https://github.com/cloudfoundry/tac.git
+          build_repo_branch: master
+          build_shell_command: |
+            #!/bin/bash -l # required to load /etc/profile.d/gvm.sh
+
+            env | sort
+
+            type gvm # this should be a function, loaded by /etc/profile.d/gvm.sh
+
+            if ! gvm use 1.1.2; then
+              echo "Wrong Go version or GVM not installed."
+              exit 1
+            fi
+
+            if ! chruby 1.9.3; then
+              echo "Wrong Ruby version or chruby not installed."
+              exit 1
+            fi
+
+            echo "All is well."
+            exit 0
