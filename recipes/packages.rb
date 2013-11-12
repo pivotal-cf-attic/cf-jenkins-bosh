@@ -20,3 +20,9 @@ package 'libsqlite3-dev'
 
 # for installing bzr go dependencies (for spiff)
 package 'bzr'
+
+# for capybara-webkit
+package 'qt4-dev-tools '
+package 'libqt4-dev '
+package 'libqt4-core '
+package 'libqt4-gui'
