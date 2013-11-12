@@ -16,8 +16,8 @@ describe 'cf-jenkins::packages' do
   it { should install_package('libsqlite3-dev') }
   it { should install_package('bzr') }
 
-  it { should install_package('qt4-dev-tools ') }
-  it { should install_package('libqt4-dev ') }
-  it { should install_package('libqt4-core ') }
+  it { should install_package('qt4-dev-tools') }
+  it { should install_package('libqt4-dev') }
+  it { should install_package('libqt4-core') }
   it { should install_package('libqt4-gui') }
 end
