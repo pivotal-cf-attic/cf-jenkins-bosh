@@ -22,7 +22,8 @@ plugins = [
   "ansicolor",
   "greenballs",
   "buildgraph-view",
-  "build-flow-plugin"
+  "build-flow-plugin",
+  "iphoneview",
 ]
 
 plugins.each do |plugin|
