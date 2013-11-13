@@ -79,7 +79,7 @@
     <% if @build_junit_artifacts %>
     <hudson.tasks.junit.JUnitResultArchiver>
       <testResults><![CDATA[<%= @build_junit_artifacts %>]]></testResults>
-      <keepLongStdio>false</keepLongStdio>
+      <keepLongStdio>true</keepLongStdio>
       <testDataPublishers/>
     </hudson.tasks.junit.JUnitResultArchiver>
     <% end %>
@@ -112,7 +112,15 @@
     <% end %>
   </publishers>
   <buildWrappers>
-    <% if @build_timeout_percentage && @build_timeout_default %>
+    <% if @build_timeout %>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.12.2">
+      <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
+        <timeoutMinutes><%= @build_timeout %></timeoutMinutes>
+      </strategy>
+      <failBuild>true</failBuild>
+      <writingDescription>false</writingDescription>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+    <% elsif @build_timeout_percentage && @build_timeout_default %>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.12.2">
       <strategy class="hudson.plugins.build_timeout.impl.ElasticTimeOutStrategy">
         <timeoutPercentage><%= @build_timeout_percentage %></timeoutPercentage>
