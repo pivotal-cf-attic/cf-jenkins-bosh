@@ -6,8 +6,8 @@ setup() {
   which gvm
 }
 
-@test "go 1.1.2 is installed" {
-  gvm use 1.1.2 && go version | grep 1.1.2
+@test "go 1.2 is installed" {
+  gvm use 1.2 && go version | grep 1.2
 }
 
 @test "default gvm script location" {

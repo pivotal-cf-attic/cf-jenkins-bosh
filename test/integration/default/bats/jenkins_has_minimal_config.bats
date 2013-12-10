@@ -1,4 +1,4 @@
-@test "installing and running a jenkins job which requires gvm, go1.1.2, chruby, and ruby 1.9.3" {
+@test "installing and running a jenkins job which requires gvm, go1.2, chruby, and ruby 1.9.3" {
   curl -s -X POST http://127.0.0.1:8080/job/dummy_job/build
 
   while true; do

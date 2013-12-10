@@ -14,6 +14,6 @@ describe 'cf-jenkins::gvm' do
 
   it { should create_remote_file(gvm_installer).with(mode: 0755, source: 'https://raw.github.com/moovweb/gvm/master/binscripts/gvm-installer') }
   it { should run_bash('install GVM').with(code: "#{gvm_installer} master /usr/local/share") }
-  it { should run_bash('install go 1.1.2').with(code: 'source /usr/local/share/gvm/scripts/gvm && gvm install go1.1.2') }
+  it { should run_bash('install go 1.2').with(code: 'source /usr/local/share/gvm/scripts/gvm && gvm install go1.2') }
   it { should create_file('/etc/profile.d/gvm.sh').with(mode: 0755) }
 end

@@ -19,8 +19,8 @@ bash 'install GVM' do
   not_if { ::File.exists?(gvm_script) }
 end
 
-bash 'install go 1.1.2' do
-  code "source #{gvm_script} && gvm install go1.1.2"
+bash 'install go 1.2' do
+  code "source #{gvm_script} && gvm install go1.2"
 end
 
 file '/etc/profile.d/gvm.sh' do

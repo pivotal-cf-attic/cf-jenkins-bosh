@@ -48,7 +48,7 @@ suites:
 
             type gvm # this should be a function, loaded by /etc/profile.d/gvm.sh
 
-            if ! gvm use 1.1.2; then
+            if ! gvm use 1.2; then
               echo "Wrong Go version or GVM not installed."
               exit 1
             fi
