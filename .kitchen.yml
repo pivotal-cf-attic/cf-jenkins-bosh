@@ -19,7 +19,6 @@ suites:
     rubies:
       list:
       - 'ruby 1.9.3-p484'
-      - 'ruby 2.0.0-p353'
       install_bundler: true
     chruby_install:
       default_ruby: '1.9.3-p484'
