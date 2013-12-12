@@ -1,4 +1,5 @@
-require 'yaml'
+require 'chefspec'
+require 'chefspec/librarian'
 
 PROJECT_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
@@ -13,8 +14,6 @@ RSpec.configure do |config|
   config.order = 'random' # Run specs in random order to surface order dependencies.
 
   ### ChefSpec ###
-  config.before(:suite) { system("cd #{PROJECT_ROOT} && librarian-chef install --quiet") }
-  config.cookbook_path = YAML.load_file(File.join(PROJECT_ROOT, '.librarian', 'chef', 'config'))['LIBRARIAN_CHEF_PATH']
   config.platform = 'ubuntu'
   config.version = '12.04'
 
