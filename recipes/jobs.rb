@@ -1,7 +1,7 @@
 node['cf_jenkins']['jobs'].each do |job_settings|
   job_dir = ::File.join(node['jenkins']['server']['home'], 'jobs', job_settings[:name])
   job_config = ::File.join(job_dir, 'config.xml')
-  job_template_source = job_settings[:build_flow] ? 'build-flow-config.xml.erb' :'config.xml.erb'
+  job_template_source = job_settings[:build_flow] ? 'build-flow-config.xml.erb' : 'config.xml.erb'
 
   directory job_dir do
     owner node['jenkins']['server']['user']
