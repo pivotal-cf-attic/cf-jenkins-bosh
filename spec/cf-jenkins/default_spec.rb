@@ -11,4 +11,12 @@ describe 'cf-jenkins::default' do
   it { expect(chef_run).to include_recipe('cf-jenkins::gvm') }
   it { expect(chef_run).to include_recipe('cf-jenkins::ssh_config') }
   it { expect(chef_run).to include_recipe('cf-jenkins::packages') }
+
+  it 'sets default plugins' do
+    plugins = chef_run.node['cf_jenkins']['plugins']
+
+    # Probably not necessary to assert every default plugin, just that it sets something.
+    expect(plugins).to include('git')
+    expect(plugins).to include('greenballs')
+  end
 end

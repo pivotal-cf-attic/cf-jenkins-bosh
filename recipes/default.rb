@@ -1,3 +1,30 @@
+node.default['cf_jenkins']['plugins'] = %w(
+  git
+  git-client
+  github
+  multiple-scms
+  github-api
+  ssh-credentials
+  ssh-agent
+  credentials
+  git-parameter
+  subversion
+  promoted-builds
+  conditional-buildstep
+  maven-plugin
+  javadoc
+  mailer
+  scm-api
+  token-macro
+  parameterized-trigger
+  run-condition
+  build-timeout
+  ansicolor
+  greenballs
+  buildgraph-view
+  build-flow-plugin
+  iphoneview
+)
 
 include_recipe 'apt'
 

@@ -12,4 +12,8 @@ module CustomChefSpecMatchers
   def update_jenkins_job(job_name)
     ChefSpec::Matchers::ResourceMatcher.new(:jenkins_job, :update, job_name)
   end
+
+  def install_jenkins_plugin(plugin_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:jenkins_plugin, :install, plugin_name)
+  end
 end
