@@ -15,7 +15,9 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
     group node['jenkins']['server']['user']
     mode 00644
     variables(
-      'build_shell_command' => "cf_deploy --dirty --release-name #{name} --release-repo #{pipeline_settings.fetch('git')} --release-ref #{pipeline_settings.fetch('release_ref')} --infrastructure #{pipeline_settings.fetch('infrastructure')} --deployments-repo #{pipeline_settings.fetch('deployments_repo')} --deployment-name #{pipeline_settings.fetch('deployment_name')}"
+      'build_shell_command' => "cf_deploy --dirty --release-name #{name} --release-repo #{pipeline_settings.fetch('git')} --release-ref #{pipeline_settings.fetch('release_ref')} --infrastructure #{pipeline_settings.fetch('infrastructure')} --deployments-repo #{pipeline_settings.fetch('deployments_repo')} --deployment-name #{pipeline_settings.fetch('deployment_name')}",
+      'build_repo' => pipeline_settings.fetch('git'),
+      'build_repo_branch' => pipeline_settings.fetch('release_ref')
     )
   end
 

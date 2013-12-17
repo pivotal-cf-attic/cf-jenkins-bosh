@@ -48,7 +48,11 @@ describe 'cf-jenkins::pipelines' do
            owner: jenkins_user,
            group: jenkins_group,
            mode: 00644,
-           variables: {'build_shell_command' => expected_command})
+           variables: {
+             'build_shell_command' => expected_command,
+             'build_repo' => 'https://github.com/org/release.git',
+             'build_repo_branch' => 'master'
+           })
   end
 
   it { should update_jenkins_job('example_project-deploy').with(config: job_config) }
