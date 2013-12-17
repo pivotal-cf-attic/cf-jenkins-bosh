@@ -61,7 +61,7 @@ chruby 1.9.3
 gem install bundler --no-ri --no-rdoc --conservative
 bundle install
 
-bundle exec cf_deploy #{cf_deploy_options}
+SHELL=/bin/bash bundle exec cf_deploy #{cf_deploy_options}
     BASH
 
     should create_template(job_config).

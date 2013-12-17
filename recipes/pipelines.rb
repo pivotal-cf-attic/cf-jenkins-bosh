@@ -32,7 +32,7 @@ chruby 1.9.3
 gem install bundler --no-ri --no-rdoc --conservative
 bundle install
 
-bundle exec cf_deploy #{options}
+SHELL=/bin/bash bundle exec cf_deploy #{options}
     BASH
     variables(
       'build_shell_command' => command,
