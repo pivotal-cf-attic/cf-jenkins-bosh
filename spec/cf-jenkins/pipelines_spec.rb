@@ -40,9 +40,30 @@ describe 'cf-jenkins::pipelines' do
   end
 
   it { should create_directory(File.join(fake_jenkins_home, 'jobs', 'example_project-deploy')).with(mode: 00755) }
-  it 'uses the right shell command' do
-    expected_command =
-      'cf_deploy --dirty --release-name example_project --release-repo https://github.com/org/release.git --release-ref master --infrastructure warden --deployments-repo https://github.com/org/deployments.git --deployment-name my_environment'
+
+  it 'sets up the environment and executes cf_deploy' do
+    cf_deploy_options = %w(
+    --non-interactive
+    --release-name example_project
+    --release-repo https://github.com/org/release.git
+    --release-ref master
+    --infrastructure warden
+    --deployments-repo https://github.com/org/deployments.git
+    --deployment-name my_environment
+    ).join(' ')
+
+    expected_command = <<-BASH
+#/bin/bash
+set -x
+
+source /usr/local/share/chruby/chruby.sh
+chruby 1.9.3
+gem install bundler --no-ri --no-rdoc --conservative
+bundle install
+
+bundle exec cf_deploy #{cf_deploy_options}
+    BASH
+
     should create_template(job_config).
       with(source: 'config.xml.erb',
            owner: jenkins_user,

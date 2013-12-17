@@ -14,8 +14,28 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
     owner node['jenkins']['server']['user']
     group node['jenkins']['server']['user']
     mode 00644
+    options = %W(
+      --non-interactive
+      --release-name #{name}
+      --release-repo #{pipeline_settings.fetch('git')}
+      --release-ref #{pipeline_settings.fetch('release_ref')}
+      --infrastructure #{pipeline_settings.fetch('infrastructure')}
+      --deployments-repo #{pipeline_settings.fetch('deployments_repo')}
+      --deployment-name #{pipeline_settings.fetch('deployment_name')}
+    ).join(' ')
+    command = <<-BASH
+#/bin/bash
+set -x
+
+source /usr/local/share/chruby/chruby.sh
+chruby 1.9.3
+gem install bundler --no-ri --no-rdoc --conservative
+bundle install
+
+bundle exec cf_deploy #{options}
+    BASH
     variables(
-      'build_shell_command' => "cf_deploy --dirty --release-name #{name} --release-repo #{pipeline_settings.fetch('git')} --release-ref #{pipeline_settings.fetch('release_ref')} --infrastructure #{pipeline_settings.fetch('infrastructure')} --deployments-repo #{pipeline_settings.fetch('deployments_repo')} --deployment-name #{pipeline_settings.fetch('deployment_name')}",
+      'build_shell_command' => command,
       'build_repo' => pipeline_settings.fetch('git'),
       'build_repo_branch' => pipeline_settings.fetch('release_ref')
     )
