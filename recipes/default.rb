@@ -24,7 +24,6 @@ node.default['cf_jenkins']['plugins'] = %w(
   buildgraph-view
   build-flow-plugin
   iphoneview
-  job-dsl
 )
 
 include_recipe 'apt'
