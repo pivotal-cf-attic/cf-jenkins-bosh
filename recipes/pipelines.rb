@@ -24,7 +24,7 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
       --deployment-name #{pipeline_settings.fetch('deployment_name')}
     ).join(' ')
     command = <<-BASH
-#/bin/bash
+#!/bin/bash
 set -x
 
 source /usr/local/share/chruby/chruby.sh

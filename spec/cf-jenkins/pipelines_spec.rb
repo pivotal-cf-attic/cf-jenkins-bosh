@@ -53,7 +53,7 @@ describe 'cf-jenkins::pipelines' do
     ).join(' ')
 
     expected_command = <<-BASH
-#/bin/bash
+#!/bin/bash
 set -x
 
 source /usr/local/share/chruby/chruby.sh
