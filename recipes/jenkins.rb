@@ -24,3 +24,4 @@ service 'jenkins' do
 end
 
 include_recipe 'cf-jenkins::jobs'
+include_recipe 'cf-jenkins::pipelines'

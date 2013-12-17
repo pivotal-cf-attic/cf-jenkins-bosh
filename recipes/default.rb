@@ -26,6 +26,8 @@ node.default['cf_jenkins']['plugins'] = %w(
   iphoneview
 )
 
+node.default['cf_jenkins']['pipelines'] = []
+
 include_recipe 'apt'
 
 include_recipe 'chef_rubies'

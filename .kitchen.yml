@@ -62,3 +62,13 @@ suites:
 
             echo "All is well."
             exit 0
+      pipelines:
+        garden:
+          git: https://github.com/vito/garden-pool-spike.git
+          release_name: garden-pool
+          release_ref: master
+          infrastructure: warden
+          deployments_repo: https://github.com/cloudfoundry/deployments-foo.git
+          deployment_name: bosh_lite
+          steps:
+            - deploy
