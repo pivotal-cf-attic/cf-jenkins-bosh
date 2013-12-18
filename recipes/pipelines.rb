@@ -32,6 +32,9 @@ chruby 1.9.3
 gem install bundler --no-ri --no-rdoc --conservative
 bundle install
 
+source /usr/local/share/gvm/scripts/gvm
+gvm use go1.2
+
 SHELL=/bin/bash bundle exec cf_deploy #{options}
     BASH
     variables(
