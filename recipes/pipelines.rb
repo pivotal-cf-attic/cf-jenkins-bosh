@@ -22,6 +22,7 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
       --infrastructure #{pipeline_settings.fetch('infrastructure')}
       --deployments-repo #{pipeline_settings.fetch('deployments_repo')}
       --deployment-name #{pipeline_settings.fetch('deployment_name')}
+      --rebase
     ).join(' ')
     command = <<-BASH
 #!/bin/bash

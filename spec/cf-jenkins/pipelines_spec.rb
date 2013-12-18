@@ -50,6 +50,7 @@ describe 'cf-jenkins::pipelines' do
     --infrastructure warden
     --deployments-repo https://github.com/org/deployments.git
     --deployment-name my_environment
+    --rebase
     ).join(' ')
 
     expected_command = <<-BASH
