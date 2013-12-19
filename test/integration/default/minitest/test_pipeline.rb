@@ -11,6 +11,10 @@ describe 'pipeline support' do
       "Shell command was incorrect"
   end
 
+  it 'creates a system test job downstream from the deploy job' do
+    downstream_jobs_for('garden-deploy').must_equal ['garden-system_tests']
+  end
+
   def all_jobs
     json = curl "#{host}/api/json"
     JSON.parse(json).fetch('jobs')
@@ -25,6 +29,13 @@ describe 'pipeline support' do
     JobConfig.new(
       REXML::XPath.first(doc, '//builders/hudson.tasks.Shell/command').text
     )
+  end
+
+  def downstream_jobs_for(job_name)
+    json = curl "#{host}/job/#{job_name}/api/json"
+    JSON.parse(json).fetch('downstreamProjects').map do |project|
+      project.fetch('name')
+    end
   end
 
   class JobConfig < Struct.new(:shell_command)
