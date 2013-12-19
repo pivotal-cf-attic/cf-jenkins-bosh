@@ -15,6 +15,14 @@ describe 'pipeline support' do
     downstream_jobs_for('garden-deploy').must_equal ['garden-system_tests']
   end
 
+  it 'creates a release tarball job downstream from the system test job' do
+    downstream_jobs_for('garden-system_tests').must_equal ['garden-release_tarball']
+  end
+
+  it 'terminates at the release tarball' do
+    downstream_jobs_for('garden-release_tarball').must_be_empty
+  end
+
   def all_jobs
     json = curl "#{host}/api/json"
     JSON.parse(json).fetch('jobs')
