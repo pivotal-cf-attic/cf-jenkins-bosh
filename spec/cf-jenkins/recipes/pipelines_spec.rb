@@ -57,6 +57,10 @@ gvm use go1.2
     Chef::REST::RESTRequest.stub(new: fake_chef_rest_for_jenkins_check)
   end
 
+  it 'adds nokogiri, so it can generate XML' do
+    expect(chef_run).to install_gem_package('nokogiri')
+  end
+
   it { should create_directory(File.join(fake_jenkins_home, 'jobs', 'example_project-deploy')).with(mode: 00755) }
 
   it 'has a job for executing cf_deploy' do
