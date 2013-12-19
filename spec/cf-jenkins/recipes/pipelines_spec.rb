@@ -61,9 +61,38 @@ gvm use go1.2
     expect(chef_run).to install_chef_gem('nokogiri')
   end
 
-  it { should create_directory(File.join(fake_jenkins_home, 'jobs', 'example_project-deploy')).with(mode: 00755) }
+  matcher(:create_jenkins_job) do |expected_job_name, options|
+    job_directory = ::File.join(options.fetch(:in), 'jobs', expected_job_name)
+    config_path = ::File.join(job_directory, 'config.xml')
 
-  it 'has a job for executing cf_deploy' do
+    matchers_for = ->(chef_run) {
+      jenkins_user = jenkins_group = chef_run.node['jenkins']['server']['user']
+      [
+        ChefSpec::Matchers::ResourceMatcher.new('jenkins_job', 'update', expected_job_name).with(config: config_path),
+        ChefSpec::Matchers::ResourceMatcher.new('directory', 'create', job_directory).with(mode: 0755),
+        ChefSpec::Matchers::ResourceMatcher.new('file', 'create', config_path).with(
+          owner: jenkins_user,
+          group: jenkins_group,
+          mode: 00644,
+        ),
+        ChefSpec::Matchers::RenderFileMatcher.new(config_path).with_content(options.fetch(:command))
+      ]
+    }
+
+    match do |chef_run|
+      matchers_for[chef_run].all? {|matcher| matcher.matches?(chef_run)}
+    end
+
+    failure_message_for_should do |chef_run|
+      matchers_for[chef_run].find {|matcher| !matcher.matches?(chef_run)}.failure_message_for_should
+    end
+
+    description do
+      "create a pipeline jenkins job for #{expected_job_name}"
+    end
+  end
+
+  let(:deploy_command) do
     cf_deploy_options = %w(
     --non-interactive
     --release-name example_project
@@ -75,7 +104,7 @@ gvm use go1.2
     --rebase
     ).join(' ')
 
-    expected_command = <<-BASH
+    <<-BASH
 #!/bin/bash
 set -x
 
@@ -83,21 +112,11 @@ set -x
 #{go_setup}
 SHELL=/bin/bash bundle exec cf_deploy #{cf_deploy_options}
     BASH
-
-    should render_file(deploy_job_config).with_content(expected_command)
-    should create_file(deploy_job_config).with(
-      owner: jenkins_user,
-      group: jenkins_group,
-      mode: 00644,
-    )
   end
+  it { should create_jenkins_job('example_project-deploy', in: fake_jenkins_home, command: deploy_command) }
 
-  it { should update_jenkins_job('example_project-deploy').with(config: deploy_job_config) }
-
-  it { should create_directory(File.join(fake_jenkins_home, 'jobs', 'example_project-system_tests')).with(mode: 00755) }
-
-  it "has a job for running the project's system tests" do
-    expected_command = <<-BASH
+  let(:test_command) do
+    <<-BASH
 #!/bin/bash
 set -x
 
@@ -105,14 +124,6 @@ set -x
 #{go_setup}
 script/run_system_tests
     BASH
-
-    should render_file(tests_job_config).with_content(expected_command)
-    should create_file(tests_job_config).with(
-      owner: jenkins_user,
-      group: jenkins_group,
-      mode: 00644,
-    )
   end
-
-  it { should update_jenkins_job('example_project-system_tests').with(config: tests_job_config) }
+  it { should create_jenkins_job('example_project-system_tests', in: fake_jenkins_home, command: test_command) }
 end
