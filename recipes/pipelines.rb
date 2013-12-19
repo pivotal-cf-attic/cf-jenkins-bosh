@@ -1,4 +1,4 @@
-gem_package 'nokogiri'
+chef_gem 'nokogiri'
 
 node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
   deploy_job_dir = ::File.join(node['jenkins']['server']['home'], 'jobs', "#{name}-deploy")

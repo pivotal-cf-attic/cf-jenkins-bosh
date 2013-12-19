@@ -1,4 +1,3 @@
-require 'nokogiri'
 
 module JenkinsClient
   class Job
@@ -9,6 +8,7 @@ module JenkinsClient
     end
 
     def to_xml
+       require 'nokogiri'
        builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
          xml.project do
            xml.description description

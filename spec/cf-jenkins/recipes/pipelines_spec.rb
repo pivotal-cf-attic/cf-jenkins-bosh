@@ -58,7 +58,7 @@ gvm use go1.2
   end
 
   it 'adds nokogiri, so it can generate XML' do
-    expect(chef_run).to install_gem_package('nokogiri')
+    expect(chef_run).to install_chef_gem('nokogiri')
   end
 
   it { should create_directory(File.join(fake_jenkins_home, 'jobs', 'example_project-deploy')).with(mode: 00755) }
