@@ -2,6 +2,7 @@ require 'chefspec'
 require 'chefspec/librarian'
 
 PROJECT_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+$LOAD_PATH << File.join(PROJECT_ROOT, 'lib')
 
 Dir.glob(File.join(PROJECT_ROOT, 'spec', 'support', '*.rb')).each do |support_file|
   require support_file

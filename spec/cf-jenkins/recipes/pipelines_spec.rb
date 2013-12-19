@@ -80,17 +80,12 @@ set -x
 SHELL=/bin/bash bundle exec cf_deploy #{cf_deploy_options}
     BASH
 
-    should create_template(deploy_job_config).
-      with(source: 'pipeline_deploy_config.xml.erb',
-           owner: jenkins_user,
-           group: jenkins_group,
-           mode: 00644,
-           variables: {
-             'shell_command' => expected_command,
-             'repo' => 'https://github.com/org/release.git',
-             'repo_branch' => 'master',
-             'downstream_project' => 'example_project-system_tests'
-           })
+    should render_file(deploy_job_config).with_content(expected_command)
+    should create_file(deploy_job_config).with(
+      owner: jenkins_user,
+      group: jenkins_group,
+      mode: 00644,
+    )
   end
 
   it { should update_jenkins_job('example_project-deploy').with(config: deploy_job_config) }
@@ -107,16 +102,12 @@ set -x
 script/run_system_tests
     BASH
 
-    should create_template(tests_job_config).
-      with(source: 'pipeline_system_tests_config.xml.erb',
-           owner: jenkins_user,
-           group: jenkins_group,
-           mode: 00644,
-           variables: {
-             'shell_command' => expected_command,
-             'repo' => 'https://github.com/org/release.git',
-             'repo_branch' => 'master'
-           })
+    should render_file(tests_job_config).with_content(expected_command)
+    should create_file(tests_job_config).with(
+      owner: jenkins_user,
+      group: jenkins_group,
+      mode: 00644,
+    )
   end
 
   it { should update_jenkins_job('example_project-system_tests').with(config: tests_job_config) }

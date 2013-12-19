@@ -9,11 +9,12 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
     action :create
   end
 
-  template deploy_job_config do
-    source 'pipeline_deploy_config.xml.erb'
-    owner node['jenkins']['server']['user']
-    group node['jenkins']['server']['user']
-    mode 00644
+  file deploy_job_config do
+    job = JenkinsClient::Job.new
+    job.git_repo_url = pipeline_settings.fetch('git')
+    job.git_repo_branch = pipeline_settings.fetch('release_ref')
+    job.downstream_jobs = ["#{name}-system_tests"]
+
     options = %W(
       --non-interactive
       --release-name #{name}
@@ -24,7 +25,7 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
       --deployment-name #{pipeline_settings.fetch('deployment_name')}
       --rebase
     ).join(' ')
-    command = <<-BASH
+    job.command = <<-BASH
 #!/bin/bash
 set -x
 
@@ -38,12 +39,11 @@ gvm use go1.2
 
 SHELL=/bin/bash bundle exec cf_deploy #{options}
     BASH
-    variables(
-      'shell_command' => command,
-      'repo' => pipeline_settings.fetch('git'),
-      'repo_branch' => pipeline_settings.fetch('release_ref'),
-      'downstream_project' => "#{name}-system_tests"
-    )
+    content job.to_xml
+
+    owner node['jenkins']['server']['user']
+    group node['jenkins']['server']['user']
+    mode 00644
   end
 
   jenkins_job "#{name}-deploy" do
@@ -61,12 +61,22 @@ SHELL=/bin/bash bundle exec cf_deploy #{options}
     action :create
   end
 
-  template tests_job_config do
-    source 'pipeline_system_tests_config.xml.erb'
-    owner node['jenkins']['server']['user']
-    group node['jenkins']['server']['user']
-    mode 00644
-    command = <<-BASH
+  file tests_job_config do
+    job = JenkinsClient::Job.new
+    job.git_repo_url = pipeline_settings.fetch('git')
+    job.git_repo_branch = pipeline_settings.fetch('release_ref')
+
+    options = %W(
+      --non-interactive
+      --release-name #{name}
+      --release-repo #{pipeline_settings.fetch('git')}
+      --release-ref #{pipeline_settings.fetch('release_ref')}
+      --infrastructure #{pipeline_settings.fetch('infrastructure')}
+      --deployments-repo #{pipeline_settings.fetch('deployments_repo')}
+      --deployment-name #{pipeline_settings.fetch('deployment_name')}
+      --rebase
+    ).join(' ')
+    job.command = <<-BASH
 #!/bin/bash
 set -x
 
@@ -80,11 +90,11 @@ gvm use go1.2
 
 script/run_system_tests
     BASH
-    variables(
-      'shell_command' => command,
-      'repo' => pipeline_settings.fetch('git'),
-      'repo_branch' => pipeline_settings.fetch('release_ref')
-    )
+    content job.to_xml
+
+    owner node['jenkins']['server']['user']
+    group node['jenkins']['server']['user']
+    mode 00644
   end
 
   jenkins_job "#{name}-system_tests" do
