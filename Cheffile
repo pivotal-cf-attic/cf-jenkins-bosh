@@ -13,3 +13,5 @@ cookbook 'jenkins'
 
 cookbook 'cf-jenkins',
   path: '.'
+
+cookbook 'chef_handler'
