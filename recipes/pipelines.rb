@@ -15,7 +15,7 @@ def add_jenkins_job_for_step(pipeline_name, pipeline_settings, step, next_step, 
     job = JenkinsClient::Job.new
     job.git_repo_url = pipeline_settings.fetch('git')
     job.git_repo_branch = pipeline_settings.fetch('release_ref')
-    job.downstream_jobs = ["#{pipeline_name}-#{next_step}"]
+    job.downstream_jobs = ["#{pipeline_name}-#{next_step}"] if next_step
     job.command = <<-CMD
 #!/bin/bash
 set -x
@@ -60,6 +60,6 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
                            "SHELL=/bin/bash bundle exec cf_deploy #{options}")
   add_jenkins_job_for_step(name, pipeline_settings, 'system_tests', 'release_tarball',
                            "script/run_system_tests")
-  add_jenkins_job_for_step(name, pipeline_settings, 'release_tarball', '',
+  add_jenkins_job_for_step(name, pipeline_settings, 'release_tarball', nil,
                            "echo #{name} | bosh create release --with-tarball --force")
 end

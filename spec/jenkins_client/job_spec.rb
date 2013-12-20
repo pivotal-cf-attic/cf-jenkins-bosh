@@ -58,6 +58,18 @@ describe JenkinsClient::Job do
     end
   end
 
+  matcher(:have_no_downstream_jobs) do
+    match do |xml|
+      doc = Nokogiri::XML(xml)
+      xpath = '//publishers/hudson.plugins.parameterizedtrigger.BuildTrigger/configs/hudson.plugins.parameterizedtrigger.BuildTriggerConfig/projects'
+      doc.xpath(xpath).first.nil?
+    end
+
+    failure_message_for_should do |xml|
+      "Expected to find no downstream jobs in:\n#{xml}"
+    end
+  end
+
   it 'serializes the git SCM config' do
     job = JenkinsClient::Job.new
     job.git_repo_url = "https://github.com/org/repo"
@@ -79,5 +91,11 @@ describe JenkinsClient::Job do
     job.downstream_jobs = ['other-project', 'different-project']
 
     expect(job.to_xml).to have_downstream_jobs(['other-project', 'different-project'])
+  end
+
+  it 'serializes a job without downstream jobs' do
+    job = JenkinsClient::Job.new
+
+    expect(job.to_xml).to have_no_downstream_jobs
   end
 end
