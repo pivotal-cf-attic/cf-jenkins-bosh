@@ -2,6 +2,12 @@ require 'spec_helper'
 require_relative '../../libraries/job'
 
 describe JenkinsClient::Job do
+  describe "by default" do
+    subject { JenkinsClient::Job.new.to_xml }
+    it { should have_no_downstream_jobs }
+    it { should have_no_artifact_glob }
+  end
+
   it 'serializes the description' do
     job = JenkinsClient::Job.new
     job.description = "Best job ever"
@@ -62,11 +68,27 @@ describe JenkinsClient::Job do
     match do |xml|
       doc = Nokogiri::XML(xml)
       xpath = '//publishers/hudson.plugins.parameterizedtrigger.BuildTrigger/configs/hudson.plugins.parameterizedtrigger.BuildTriggerConfig/projects'
-      doc.xpath(xpath).first.nil?
+      doc.xpath(xpath).empty?
     end
 
     failure_message_for_should do |xml|
       "Expected to find no downstream jobs in:\n#{xml}"
+    end
+  end
+
+  matcher(:have_artifact_glob) do |expected_glob|
+    match do |xml|
+      doc = Nokogiri::XML(xml)
+      xpath = '//publishers/hudson.tasks.ArtifactArchiver/artifacts'
+      doc.xpath(xpath).text == expected_glob
+    end
+  end
+
+  matcher(:have_no_artifact_glob) do
+    match do |xml|
+      doc = Nokogiri::XML(xml)
+      xpath = '//publishers/hudson.tasks.ArtifactArchiver/artifacts'
+      doc.xpath(xpath).empty?
     end
   end
 
@@ -93,9 +115,10 @@ describe JenkinsClient::Job do
     expect(job.to_xml).to have_downstream_jobs(['other-project', 'different-project'])
   end
 
-  it 'serializes a job without downstream jobs' do
+  it 'archives artifacts when a glob is given' do
     job = JenkinsClient::Job.new
+    job.artifact_glob = "dev_releases/*.tgz"
 
-    expect(job.to_xml).to have_no_downstream_jobs
+    expect(job.to_xml).to have_artifact_glob("dev_releases/*.tgz")
   end
 end
