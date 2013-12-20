@@ -61,5 +61,5 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
   add_jenkins_job_for_step(name, pipeline_settings, 'system_tests', 'release_tarball',
                            "script/run_system_tests")
   add_jenkins_job_for_step(name, pipeline_settings, 'release_tarball', nil,
-                           "echo #{name} | bosh create release --with-tarball --force")
+                           "rm -rf dev_releases; echo #{name} | bosh create release --with-tarball --force")
 end

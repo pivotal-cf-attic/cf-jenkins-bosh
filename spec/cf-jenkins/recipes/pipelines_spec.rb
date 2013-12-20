@@ -122,6 +122,6 @@ set -x
   let(:test_command) { "script/run_system_tests" }
   it { should create_jenkins_job('example_project-system_tests', in: fake_jenkins_home, command: test_command) }
 
-  let(:release_command) { "echo example_project | bosh create release --with-tarball --force" }
+  let(:release_command) { "rm -rf dev_releases; echo example_project | bosh create release --with-tarball --force" }
   it { should create_jenkins_job('example_project-release_tarball', in: fake_jenkins_home, command: release_command) }
 end
