@@ -12,7 +12,6 @@ describe 'cf-jenkins::pipelines' do
         'pipelines' => {
           'example_project' => {
             'git' => 'https://github.com/org/release.git',
-            'release_name' => 'my-release',
             'release_ref' => 'master',
             'infrastructure' => 'warden',
             'deployments_repo' => 'https://github.com/org/deployments.git',
@@ -123,6 +122,6 @@ set -x
   let(:test_command) { "script/run_system_tests" }
   it { should create_jenkins_job('example_project-system_tests', in: fake_jenkins_home, command: test_command) }
 
-  let(:release_command) { "bosh create release --with-tarball --force" }
+  let(:release_command) { "echo example_project | bosh create release --with-tarball --force" }
   it { should create_jenkins_job('example_project-release_tarball', in: fake_jenkins_home, command: release_command) }
 end
