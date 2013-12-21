@@ -1,50 +1,8 @@
 chef_gem 'nokogiri'
 
-def add_jenkins_job_for_step(pipeline_name, pipeline_settings, step, next_step, command)
-  job_dir = ::File.join(node['jenkins']['server']['home'], 'jobs', "#{pipeline_name}-#{step}")
-  job_config = ::File.join(job_dir, 'config.xml')
+def add_jenkins_job_for_deploy(name, pipeline_settings)
+  job = bare_jenkins_job(pipeline_settings)
 
-  directory job_dir do
-    owner node['jenkins']['server']['user']
-    group node['jenkins']['server']['user']
-    mode 00755
-    action :create
-  end
-
-  file job_config do
-    job = JenkinsClient::Job.new
-    job.git_repo_url = pipeline_settings.fetch('git')
-    job.git_repo_branch = pipeline_settings.fetch('release_ref')
-    job.downstream_jobs = ["#{pipeline_name}-#{next_step}"] if next_step
-    job.command = <<-CMD
-#!/bin/bash
-set -x
-
-source /usr/local/share/chruby/chruby.sh
-chruby 1.9.3
-gem install bundler --no-ri --no-rdoc --conservative
-bundle install
-
-source /usr/local/share/gvm/scripts/gvm
-gvm use go1.2
-
-#{command}
-    CMD
-
-    content job.to_xml
-
-    owner node['jenkins']['server']['user']
-    group node['jenkins']['server']['user']
-    mode 00644
-  end
-
-  jenkins_job "#{pipeline_name}-#{step}" do
-    config job_config
-    action :update
-  end
-end
-
-node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
   options = %W(
     --non-interactive
     --release-name #{name}
@@ -56,10 +14,78 @@ node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
     --rebase
   ).join(' ')
 
-  add_jenkins_job_for_step(name, pipeline_settings, 'deploy', 'system_tests',
-                           "SHELL=/bin/bash bundle exec cf_deploy #{options}")
-  add_jenkins_job_for_step(name, pipeline_settings, 'system_tests', 'release_tarball',
-                           "script/run_system_tests")
-  add_jenkins_job_for_step(name, pipeline_settings, 'release_tarball', nil,
-                           "rm -rf dev_releases; echo #{name} | bosh create release --with-tarball --force")
+  job.command = command_for_sub_command("SHELL=/bin/bash bundle exec cf_deploy #{options}")
+  job.downstream_jobs = ["#{name}-system_tests"]
+
+  add_jenkins_job_directly(job, name, 'deploy')
+end
+
+def add_jenkins_job_for_system_tests(name, pipeline_settings)
+  job = bare_jenkins_job(pipeline_settings)
+  job.command = command_for_sub_command('script/run_system_tests')
+  job.downstream_jobs = ["#{name}-release_tarball"]
+
+  add_jenkins_job_directly(job, name, 'system_tests')
+end
+
+def add_jenkins_job_for_release_tarball(name, pipeline_settings)
+  job = bare_jenkins_job(pipeline_settings)
+  job.command = command_for_sub_command("rm -rf dev_releases; echo #{name} | bosh create release --with-tarball --force")
+
+  add_jenkins_job_directly(job, name, 'release_tarball')
+end
+
+def add_jenkins_job_directly(job, name, step)
+  job_dir = ::File.join(node['jenkins']['server']['home'], 'jobs', "#{name}-#{step}")
+  job_config = ::File.join(job_dir, 'config.xml')
+
+  directory job_dir do
+    owner node['jenkins']['server']['user']
+    group node['jenkins']['server']['user']
+    mode 00755
+    action :create
+  end
+
+  file job_config do
+    content job.to_xml
+
+    owner node['jenkins']['server']['user']
+    group node['jenkins']['server']['user']
+    mode 00644
+  end
+
+  jenkins_job "#{name}-#{step}" do
+    config job_config
+    action :update
+  end
+end
+
+def bare_jenkins_job(pipeline_settings)
+  job = JenkinsClient::Job.new
+  job.git_repo_url = pipeline_settings.fetch('git')
+  job.git_repo_branch = pipeline_settings.fetch('release_ref')
+  job
+end
+
+def command_for_sub_command(sub_command)
+  <<-COMMAND
+#!/bin/bash
+set -x
+
+source /usr/local/share/chruby/chruby.sh
+chruby 1.9.3
+gem install bundler --no-ri --no-rdoc --conservative
+bundle install
+
+source /usr/local/share/gvm/scripts/gvm
+gvm use go1.2
+
+#{sub_command}
+  COMMAND
+end
+
+node['cf_jenkins']['pipelines'].each do |name, pipeline_settings|
+  add_jenkins_job_for_deploy(name, pipeline_settings)
+  add_jenkins_job_for_system_tests(name, pipeline_settings)
+  add_jenkins_job_for_release_tarball(name, pipeline_settings)
 end
