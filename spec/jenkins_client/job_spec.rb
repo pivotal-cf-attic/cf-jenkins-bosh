@@ -6,6 +6,7 @@ describe JenkinsClient::Job do
     subject { JenkinsClient::Job.new.to_xml }
     it { should have_no_downstream_jobs }
     it { should have_no_artifact_glob }
+    it { should have_color_output }
   end
 
   it 'serializes the description' do
@@ -15,6 +16,47 @@ describe JenkinsClient::Job do
     xml = job.to_xml
     doc = Nokogiri::XML(xml)
     expect(doc.xpath('//project/description').text).to eq('Best job ever')
+  end
+
+  it 'serializes the git SCM config' do
+    job = JenkinsClient::Job.new
+    job.git_repo_url = "https://github.com/org/repo"
+    job.git_repo_branch = "master"
+
+    expect(job.to_xml).to have_git_repo_url('https://github.com/org/repo')
+    expect(job.to_xml).to have_git_repo_branch('master')
+  end
+
+  it 'serializes the command' do
+    job = JenkinsClient::Job.new
+    job.command = 'release-the-hounds'
+
+    expect(job.to_xml).to have_command('release-the-hounds')
+  end
+
+  it 'serializes the downstream jobs' do
+    job = JenkinsClient::Job.new
+    job.downstream_jobs = ['other-project', 'different-project']
+
+    expect(job.to_xml).to have_downstream_jobs(['other-project', 'different-project'])
+  end
+
+  it 'archives artifacts when a glob is given' do
+    job = JenkinsClient::Job.new
+    job.artifact_glob = "dev_releases/*.tgz"
+
+    expect(job.to_xml).to have_artifact_glob("dev_releases/*.tgz")
+  end
+
+  matcher(:have_color_output) do
+    match do |xml|
+      doc = Nokogiri::XML(xml)
+      doc.xpath('//buildWrappers/hudson.plugins.ansicolor.AnsiColorBuildWrapper/colorMapName').text == 'xterm'
+    end
+
+    failure_message_for_should do |xml|
+      "Expected to find an xterm color build wrapper, but didn't:\n#{xml}"
+    end
   end
 
   matcher(:have_git_repo_url) do |expected_url|
@@ -90,35 +132,5 @@ describe JenkinsClient::Job do
       xpath = '//publishers/hudson.tasks.ArtifactArchiver/artifacts'
       doc.xpath(xpath).empty?
     end
-  end
-
-  it 'serializes the git SCM config' do
-    job = JenkinsClient::Job.new
-    job.git_repo_url = "https://github.com/org/repo"
-    job.git_repo_branch = "master"
-
-    expect(job.to_xml).to have_git_repo_url('https://github.com/org/repo')
-    expect(job.to_xml).to have_git_repo_branch('master')
-  end
-
-  it 'serializes the command' do
-    job = JenkinsClient::Job.new
-    job.command = 'release-the-hounds'
-
-    expect(job.to_xml).to have_command('release-the-hounds')
-  end
-
-  it 'serializes the downstream jobs' do
-    job = JenkinsClient::Job.new
-    job.downstream_jobs = ['other-project', 'different-project']
-
-    expect(job.to_xml).to have_downstream_jobs(['other-project', 'different-project'])
-  end
-
-  it 'archives artifacts when a glob is given' do
-    job = JenkinsClient::Job.new
-    job.artifact_glob = "dev_releases/*.tgz"
-
-    expect(job.to_xml).to have_artifact_glob("dev_releases/*.tgz")
   end
 end

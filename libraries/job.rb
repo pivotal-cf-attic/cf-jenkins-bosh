@@ -34,6 +34,12 @@ module JenkinsClient
              publish_downstream_jobs(xml, downstream_jobs)
              publish_artifacts(xml, artifact_glob)
            end
+
+           xml.buildWrappers do
+             xml.public_send('hudson.plugins.ansicolor.AnsiColorBuildWrapper', plugin: 'ansicolor@0.3.1') do
+               xml.colorMapName 'xterm'
+             end
+           end
          end
        end.to_xml
     end
