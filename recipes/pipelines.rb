@@ -31,6 +31,7 @@ end
 def add_jenkins_job_for_release_tarball(name, pipeline_settings)
   job = bare_jenkins_job(pipeline_settings)
   job.command = command_for_sub_command("rm -rf dev_releases; echo #{name} | bosh create release --with-tarball --force")
+  job.artifact_glob = 'dev_releases/*.tgz'
 
   add_jenkins_job_directly(job, name, 'release_tarball')
 end

@@ -124,4 +124,24 @@ set -x
 
   let(:release_command) { "rm -rf dev_releases; echo example_project | bosh create release --with-tarball --force" }
   it { should create_jenkins_job('example_project-release_tarball', in: fake_jenkins_home, command: release_command) }
+
+  matcher(:archive_artifacts) do |glob, options|
+    job_directory = ::File.join(options.fetch(:in), 'jobs', options.fetch(:project))
+    config_path = ::File.join(job_directory, 'config.xml')
+    matcher = ChefSpec::Matchers::RenderFileMatcher.new(config_path).with_content(glob)
+
+    match do |chef_run|
+      matcher.matches?(chef_run)
+    end
+
+    failure_message_for_should do |chef_run|
+      matcher.failure_message_for_should
+    end
+
+    description { "archive artifacts with glob #{glob} in #{options.fetch(:project)}" }
+  end
+
+  it { should archive_artifacts('dev_releases/*.tgz',
+                                in: fake_jenkins_home,
+                                project: 'example_project-release_tarball') }
 end
