@@ -1,3 +1,5 @@
+package 'libxslt-dev'
+package 'libxml2-dev'
 chef_gem 'nokogiri'
 
 def add_jenkins_job_for_deploy(name, pipeline_settings)
