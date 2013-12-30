@@ -11,6 +11,7 @@ describe 'cf-jenkins::gvm' do
   it { should install_package('binutils') }
   it { should install_package('bison') }
   it { should install_package('gcc') }
+  it { should install_package('bzr') }
 
   it { should create_remote_file(gvm_installer).with(mode: 0755, source: 'https://raw.github.com/moovweb/gvm/master/binscripts/gvm-installer') }
   it { should run_bash('install go 1.2').with(code: 'source /usr/local/share/gvm/scripts/gvm && gvm install go1.2') }

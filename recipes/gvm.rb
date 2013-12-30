@@ -1,4 +1,4 @@
-%w(curl git mercurial make binutils bison gcc).each do |pkg|
+%w(curl git mercurial make binutils bison gcc bzr).each do |pkg|
   package pkg do
     action :install
   end
