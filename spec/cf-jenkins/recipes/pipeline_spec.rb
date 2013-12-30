@@ -10,4 +10,5 @@ describe 'cf-jenkins::pipeline' do
   it { expect(chef_run).to include_recipe('cf-jenkins::jenkins_base') }
   it { expect(chef_run).to include_recipe('cf-jenkins::pipelines') }
   it { expect(chef_run).to include_recipe('cf-jenkins::pipeline_jenkins_plugins') }
+  it { expect(chef_run).to include_recipe('cf-jenkins::disable_nginx_default_site') }
 end
