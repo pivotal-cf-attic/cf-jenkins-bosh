@@ -1,6 +1,4 @@
-package 'libxslt-dev'
-package 'libxml2-dev'
-chef_gem 'nokogiri'
+chef_gem 'builder'
 
 def add_jenkins_job_for_deploy(name, pipeline_settings)
   job = bare_jenkins_job(pipeline_settings)

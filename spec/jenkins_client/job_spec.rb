@@ -1,5 +1,6 @@
 require 'spec_helper'
 require_relative '../../libraries/job'
+require 'nokogiri'
 
 describe JenkinsClient::Job do
   describe "by default" do
