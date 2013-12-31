@@ -1,4 +1,6 @@
 %w(
+  git-client
+  scm-api
   git
   parameterized-trigger
   ansicolor
