@@ -1,6 +1,6 @@
 node.set['selfsigned_certificate'] = {
   'destination' => '/var/lib/jenkins/ssl/',
-  'sslpassphrase' => node['cf-jenkins']['ssl_passphrase'],
+  'sslpassphrase' => node['cf_jenkins']['ssl_passphrase'],
   'country' => 'us',
   'state' => 'ca',
   'city' => 'sf',
@@ -11,8 +11,8 @@ node.set['selfsigned_certificate'] = {
 }
 node.set['jenkins']['http_proxy'] = {
   'server_auth_method' => 'basic',
-  'basic_auth_username' => node['cf-jenkins']['basic_auth_username'],
-  'basic_auth_password' => node['cf-jenkins']['basic_auth_password'],
+  'basic_auth_username' => node['cf_jenkins']['basic_auth_username'],
+  'basic_auth_password' => node['cf_jenkins']['basic_auth_password'],
   'ssl' => {
     'enabled' => true,
     'redirect_http' => true,

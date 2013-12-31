@@ -3,9 +3,9 @@ require 'spec_helper'
 describe 'cf-jenkins::pipeline_auth' do
   subject(:chef_run) do
     ChefSpec::Runner.new do |node|
-      node.set['cf-jenkins']['ssl_passphrase'] = 'mypassphrase'
-      node.set['cf-jenkins']['basic_auth_username'] = 'mybasicusername'
-      node.set['cf-jenkins']['basic_auth_password'] = 'mybasicpassword'
+      node.set['cf_jenkins']['ssl_passphrase'] = 'mypassphrase'
+      node.set['cf_jenkins']['basic_auth_username'] = 'mybasicusername'
+      node.set['cf_jenkins']['basic_auth_password'] = 'mybasicpassword'
     end.converge(described_recipe)
   end
 
