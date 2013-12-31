@@ -5,9 +5,10 @@ describe 'cf-jenkins::pipeline' do
 
   before { stub_include_recipe_calls }
 
-  it { expect(chef_run).to include_recipe('chef_rubies') }
-  it { expect(chef_run).to include_recipe('cf-jenkins::gvm') }
-  it { expect(chef_run).to include_recipe('cf-jenkins::jenkins_base') }
-  it { expect(chef_run).to include_recipe('cf-jenkins::pipelines') }
-  it { expect(chef_run).to include_recipe('cf-jenkins::pipeline_jenkins_plugins') }
+  example { expect(chef_run).to include_recipe('chef_rubies') }
+  example { expect(chef_run).to include_recipe('cf-jenkins::gvm') }
+  example { expect(chef_run).to include_recipe('cf-jenkins::jenkins_base') }
+  example { expect(chef_run).to include_recipe('cf-jenkins::pipelines') }
+  example { expect(chef_run).to include_recipe('cf-jenkins::pipeline_jenkins_plugins') }
+  example { expect(chef_run).to include_recipe('cf-jenkins::pipeline_auth') }
 end
