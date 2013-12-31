@@ -44,15 +44,6 @@ describe 'cf-jenkins::pipelines' do
     Chef::REST::RESTRequest.stub(new: fake_chef_rest_for_jenkins_check)
   end
 
-  it 'adds nokogiri, so it can generate XML' do
-    expect(chef_run).to install_chef_gem('nokogiri')
-  end
-
-  it 'adds libxml2-dev and libxslt-dev, so it can add nokogiri' do
-    expect(chef_run).to install_package('libxml2-dev')
-    expect(chef_run).to install_package('libxslt-dev')
-  end
-
   matcher(:create_jenkins_job) do |expected_job_name, options|
     job_directory = ::File.join(options.fetch(:in), 'jobs', expected_job_name)
     config_path = ::File.join(job_directory, 'config.xml')
