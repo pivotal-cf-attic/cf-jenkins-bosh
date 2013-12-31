@@ -72,7 +72,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command><![CDATA[<%= @build_shell_command %>]]></command>
+      <command><![CDATA[<%= @cmd_to_fix_build_repo_remote %><%= @build_shell_command %>]]></command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
