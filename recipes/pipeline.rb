@@ -1,9 +1,3 @@
-# Pipeline steps need user-specified versions of Ruby
-include_recipe 'chef_rubies'
-
-# Pipeline steps need Go available
-include_recipe 'cf-jenkins::gvm'
-
 # Minimal recipes to get Jenkins running
 include_recipe 'cf-jenkins::jenkins_base'
 
