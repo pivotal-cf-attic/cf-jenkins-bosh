@@ -10,5 +10,4 @@ describe 'cf-jenkins::pipeline' do
   example { expect(chef_run).to include_recipe('cf-jenkins::jenkins_base') }
   example { expect(chef_run).to include_recipe('cf-jenkins::pipelines') }
   example { expect(chef_run).to include_recipe('cf-jenkins::pipeline_jenkins_plugins') }
-  example { expect(chef_run).to include_recipe('cf-jenkins::pipeline_auth') }
 end

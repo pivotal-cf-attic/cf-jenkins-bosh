@@ -12,5 +12,3 @@ include_recipe 'cf-jenkins::pipelines'
 
 # Install only the plugins needed for pipeline steps
 include_recipe 'cf-jenkins::pipeline_jenkins_plugins'
-
-include_recipe 'cf-jenkins::pipeline_auth'
