@@ -62,34 +62,3 @@ suites:
 
             echo "All is well."
             exit 0
-- name: pipeline
-  run_list:
-    - recipe[cf-jenkins::profile]
-    - recipe[cf-jenkins::pipeline]
-  attributes:
-    rubies:
-      list:
-      - 'ruby 1.9.3-p484'
-      install_bundler: true
-    chruby_install:
-      default_ruby: '1.9.3-p484'
-      auto: false
-    selfsigned_certificate:
-      destination: /usr/var/ssl/certs/
-      sslpassphrase: changeme
-      country: CO
-      state: ST
-      city: CI
-      orga: OR
-      depart: DE
-      cn: CN
-      email: EMAIL
-    cf_jenkins:
-      pipelines:
-        garden:
-          git: https://github.com/vito/garden-pool-spike.git
-          release_name: garden-pool
-          release_ref: master
-          infrastructure: warden
-          deployments_repo: https://github.com/cloudfoundry/deployments-foo.git
-          deployment_name: bosh_lite
