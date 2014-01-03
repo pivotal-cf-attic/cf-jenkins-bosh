@@ -1,5 +1,7 @@
 # cf-jenkins
 
+[![Build Status](https://travis-ci.org/pivotal-cf-experimental/cf-jenkins.png)](https://travis-ci.org/pivotal-cf-experimental/cf-jenkins)
+
 This repository is a Chef cookbook for configuring Jenkins for continuous integration of Cloud Foundry projects.
 
 ## Usage
