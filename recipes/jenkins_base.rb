@@ -1,6 +1,7 @@
-include_recipe 'selfsigned_certificate'
-
+# cf-jenkins::aws mounts the persistent disk that holds jenkins config, so it
+# must happen first.
 include_recipe 'cf-jenkins::aws'
+include_recipe 'selfsigned_certificate'
 
 # workaround for broken debian package of current/newest version of jenkins:
 # https://issues.jenkins-ci.org/browse/JENKINS-20407?page=com.atlassian.streams.streams-jira-plugin:activity-stream-issue-tab
