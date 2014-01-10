@@ -1,13 +1,12 @@
 if node['aws']['access_key'] && node['aws']['secret_access_key']
   include_recipe 'aws'
 
-  if node['aws']['elastic_ip']
-    aws_elastic_ip 'jenkins ip' do
-      aws_access_key node['aws']['access_key']
-      aws_secret_access_key node['aws']['secret_access_key']
-      ip node['aws']['elastic_ip']
-      action :associate
-    end
+  aws_elastic_ip 'jenkins ip' do
+    aws_access_key node['aws']['access_key']
+    aws_secret_access_key node['aws']['secret_access_key']
+    ip node['aws']['elastic_ip']
+    action :associate
+    only_if { node['aws']['elastic_ip'] }
   end
 
   if node['aws']['ebs_volume_id']
@@ -24,13 +23,13 @@ if node['aws']['access_key'] && node['aws']['secret_access_key']
       not_if 'file -s /dev/xvdi | grep ext4'
     end
 
-    directory node[:jenkins][:server][:home] do
+    directory node['jenkins']['server']['home'] do
       owner 'root'
       group 'root'
       mode 00644
     end
 
-    mount node[:jenkins][:server][:home] do
+    mount node['jenkins']['server']['home'] do
       device '/dev/xvdi'
       fstype 'ext4'
       action [:mount, :enable]
