@@ -31,3 +31,17 @@ file ::File.join(node['jenkins']['node']['home'], '.ssh', 'known_hosts') do
   group node['jenkins']['node']['user']
   content node['cf_jenkins']['ssh_known_hosts'].join("\n")
 end
+
+file ::File.join(node['jenkins']['node']['home'], '.ssh', 'authorized_keys') do
+  user node['jenkins']['node']['user']
+  group node['jenkins']['node']['user']
+  content node['cf_jenkins']['ssh_authorized_keys'].join("\n")
+end
+
+package 'redis-server'
+
+directory node['jenkins']['server']['home'] do
+  owner node['jenkins']['node']['user']
+  group node['jenkins']['node']['user']
+  mode 0700
+end
