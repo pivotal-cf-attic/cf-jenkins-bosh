@@ -82,6 +82,6 @@ DEPENDENCIES
   chef_chruby_install (>= 0)
   chef_handler (>= 0)
   chef_rubies (>= 0)
-  jenkins (>= 0)
+  jenkins (= 1.2.2)
   selfsigned_certificate (>= 0)
 

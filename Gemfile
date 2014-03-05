@@ -8,12 +8,8 @@ gem 'foodcritic', github: 'elgalu/foodcritic', ref: '8f7de466719c60856268ffa0f38
 
 group :test do
   gem 'chefspec', '~> 3.1'
+  gem 'jenkins_api_client'
 
   # Normally builder is installed via chef_gem, but we execute some unit tests that touch that code path
   gem 'builder'
-end
-
-group :integration do
-  gem 'test-kitchen'
-  gem 'kitchen-vagrant', '~> 0.11'
 end
