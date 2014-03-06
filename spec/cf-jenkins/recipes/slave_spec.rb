@@ -16,10 +16,13 @@ describe 'cf-jenkins::slave' do
   before { stub_include_recipe_calls }
 
   it { expect(chef_run).to include_recipe('cf-jenkins::node') }
-  it { expect(chef_run).to include_recipe('jenkins::node') }
 
-  it 'sets jenkins user shell to /bin/bash' do
-    expect(chef_run).to modify_user('jenkins-node').with(shell: '/bin/bash')
+  it 'creates jenkins home directory' do
+    expect(chef_run).to create_directory('/jenkins/node/home')
+  end
+
+  it 'sets jenkins user shell to /bin/bash and sets its home directory' do
+    expect(chef_run).to create_user('jenkins-node').with(shell: '/bin/bash', home: '/jenkins/node/home')
   end
 
   it 'makes the .ssh directory' do

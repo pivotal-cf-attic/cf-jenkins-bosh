@@ -1,5 +1,4 @@
 include_recipe 'cf-jenkins::node'
-#include_recipe 'jenkins::node'
 
 group node['jenkins']['node']['user']
 
