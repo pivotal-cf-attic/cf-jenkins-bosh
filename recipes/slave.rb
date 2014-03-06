@@ -1,8 +1,11 @@
 include_recipe 'cf-jenkins::node'
 #include_recipe 'jenkins::node'
 
+group node['jenkins']['node']['user']
+
 user node['jenkins']['node']['user'] do
   shell '/bin/bash'
+  gid node['jenkins']['node']['user']
   action :modify
 end
 
