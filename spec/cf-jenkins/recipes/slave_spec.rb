@@ -5,9 +5,11 @@ describe 'cf-jenkins::slave' do
     ChefSpec::Runner.new do |node|
       node.set['jenkins']['node']['home'] = '/jenkins/node/home'
       node.set['jenkins']['node']['user'] = 'jenkins-node'
+      node.set['jenkins']['server']['home'] = '/path/to/server/home'
       node.set['cf_jenkins']['ssh_key'] = 'the_private_key'
       node.set['cf_jenkins']['ssh_key_pub'] = 'the_public_key'
       node.set['cf_jenkins']['ssh_known_hosts'] = ['host1', 'host2']
+      node.set['cf_jenkins']['ssh_authorized_keys'] = ['key1', 'key2']
     end.converge(described_recipe)
   end
 
@@ -34,5 +36,15 @@ describe 'cf-jenkins::slave' do
 
   it 'populates the known_hosts file' do
     expect(chef_run).to render_file('/jenkins/node/home/.ssh/known_hosts').with_content("host1\nhost2")
+  end
+
+  it 'populates the authorized_keys file' do
+    expect(chef_run).to render_file('/jenkins/node/home/.ssh/authorized_keys').with_content("key1\nkey2")
+  end
+
+  it { should install_package('redis-server') }
+
+  it 'makes the server home directory' do
+    expect(chef_run).to create_directory('/path/to/server/home')
   end
 end

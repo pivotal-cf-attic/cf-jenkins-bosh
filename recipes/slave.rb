@@ -1,5 +1,5 @@
 include_recipe 'cf-jenkins::node'
-include_recipe 'jenkins::node'
+#include_recipe 'jenkins::node'
 
 user node['jenkins']['node']['user'] do
   shell '/bin/bash'
