@@ -9,7 +9,7 @@ cookbook 'chef_chruby_install',
 cookbook 'selfsigned_certificate',
   git: 'https://github.com/cgravier/selfsigned_certificate'
 
-cookbook 'jenkins'
+cookbook 'jenkins', '1.2.2'
 
 cookbook 'cf-jenkins',
   path: '.'

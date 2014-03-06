@@ -1,3 +1,4 @@
+package 'git'
 package 'curl'
 package 'htop'
 package 'vim'

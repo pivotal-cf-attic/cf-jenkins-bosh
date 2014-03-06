@@ -11,22 +11,34 @@ This repository is a Chef cookbook for configuring Jenkins for continuous integr
 To run the unit tests (using [ChefSpec](https://github.com/sethvargo/chefspec)):
 
 ```shell
-bundle exec rspec
+bundle exec rake spec:unit
 ```
 
 ### Running integration tests
 
-To run the [Test Kitchen](https://github.com/test-kitchen/test-kitchen) integration specs:
+After installing vagrant and the omnibus Chef plugin:
 
 ```shell
-bundle exec kitchen test
+brew install vagrant
+vagrant plugin install vagrant-omnibus
+```
+
+To run the integration specs:
+
+```shell
+bundle exec rake spec:integration
 ```
 
 However, that command can take an uncomfortably long time while you're iterating on changing the cookbook because it creates the VM from scratch every time.
-The interesting subcommands to make it quicker to iterate are:
+A faster way to iterate would be to run the vagrant commands manually and run the tests using RSpec directly.
 
-* `bundle exec kitchen create` to create the VM
-* `bundle exec kitchen converge` to run the cookbook against the created VM
-* `bundle exec kitchen verify` to actually run the tests against the converged VM
-* `bundle exec kitchen login ubuntu` to start a session on the VM to inspect logs, e.g. when converge fails
-* `bundle exec kitchen destroy` if you want to destroy the VM
+```shell
+vagrant up
+bundle exec rspec spec/integration
+```
+
+Upon changing code in the cookbook, you can re-provision the Vagrant VMs individually to cut down on waiting.
+
+```shell
+vagrant provision {master,slave}
+```

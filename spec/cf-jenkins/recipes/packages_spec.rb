@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'cf-jenkins::packages' do
   subject(:chef_run) { ChefSpec::Runner.new.converge(described_recipe) }
 
+  it { should install_package('git') }
   it { should install_package('curl') }
   it { should install_package('htop') }
   it { should install_package('vim') }

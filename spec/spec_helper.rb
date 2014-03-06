@@ -1,5 +1,4 @@
 require 'chefspec'
-require 'chefspec/librarian'
 
 PROJECT_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 $LOAD_PATH << File.join(PROJECT_ROOT, 'lib')
@@ -15,6 +14,7 @@ RSpec.configure do |config|
   config.order = 'random' # Run specs in random order to surface order dependencies.
 
   ### ChefSpec ###
+  config.cookbook_path = 'cookbooks'
   config.platform = 'ubuntu'
   config.version = '12.04'
 

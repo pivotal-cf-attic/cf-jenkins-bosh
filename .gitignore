@@ -1,5 +1,4 @@
-.kitchen/
-.kitchen.local.yml
-tmp
 .librarian/
+.vagrant/
 cookbooks/
+tmp
