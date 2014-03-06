@@ -3,10 +3,17 @@ include_recipe 'cf-jenkins::node'
 
 group node['jenkins']['node']['user']
 
+directory node['jenkins']['node']['home'] do
+  owner node['jenkins']['node']['user']
+  group node['jenkins']['node']['group']
+  action :create
+end
+
 user node['jenkins']['node']['user'] do
   shell '/bin/bash'
   gid node['jenkins']['node']['user']
-  action :modify
+  action :create
+  home node['jenkins']['node']['home']
 end
 
 directory ::File.join(node['jenkins']['node']['home'], '.ssh') do
