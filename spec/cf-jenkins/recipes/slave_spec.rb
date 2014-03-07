@@ -5,6 +5,7 @@ describe 'cf-jenkins::slave' do
     ChefSpec::Runner.new do |node|
       node.set['jenkins']['node']['home'] = '/jenkins/node/home'
       node.set['jenkins']['node']['user'] = 'jenkins-node'
+      node.set['jenkins']['node']['shell'] = '/bin/bash'
       node.set['jenkins']['server']['home'] = '/path/to/server/home'
       node.set['cf_jenkins']['ssh_key'] = 'the_private_key'
       node.set['cf_jenkins']['ssh_key_pub'] = 'the_public_key'
