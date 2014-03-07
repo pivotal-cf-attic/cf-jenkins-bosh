@@ -18,7 +18,7 @@ describe 'cf-jenkins::slave' do
   it { expect(chef_run).to include_recipe('cf-jenkins::node') }
 
   it 'creates jenkins home directory' do
-    expect(chef_run).to create_directory('/jenkins/node/home')
+    expect(chef_run).to create_directory('/jenkins/node/home').with(owner: 'jenkins-node')
   end
 
   it 'sets jenkins user shell to /bin/bash and sets its home directory' do
