@@ -142,6 +142,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             'name' => 'jenkins-slave',
             'user' => 'jenkins',
             'group' => 'jenkins',
+            'shell' => '/bin/bash',
           }
         },
         'cf_jenkins' => {
