@@ -139,7 +139,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             'url' => 'http://192.168.33.10:8080'
           },
           'node' => {
-            'name' => 'jenkins-slave'
+            'name' => 'jenkins-slave',
+            'user' => {
+              'name' => 'jenkins',
+              'group' => 'jenkins'
+            }
           }
         },
         'cf_jenkins' => {
