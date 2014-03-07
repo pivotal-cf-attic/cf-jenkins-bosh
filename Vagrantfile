@@ -140,10 +140,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           },
           'node' => {
             'name' => 'jenkins-slave',
-            'user' => {
-              'name' => 'jenkins',
-              'group' => 'jenkins'
-            }
+            'user' => 'jenkins',
+            'group' => 'jenkins',
           }
         },
         'cf_jenkins' => {

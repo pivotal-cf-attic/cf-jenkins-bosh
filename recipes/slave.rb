@@ -1,6 +1,6 @@
 include_recipe 'cf-jenkins::node'
 
-group node['jenkins']['node']['user']
+group node['jenkins']['node']['group']
 
 user node['jenkins']['node']['user'] do
   comment 'Jenkins CI node (ssh)'
