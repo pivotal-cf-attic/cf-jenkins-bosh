@@ -46,8 +46,6 @@ describe 'cf-jenkins::slave' do
     expect(chef_run).to render_file('/jenkins/node/home/.ssh/authorized_keys').with_content("key1\nkey2")
   end
 
-  it { should install_package('redis-server') }
-
   it 'makes the server home directory' do
     expect(chef_run).to create_directory('/path/to/server/home')
   end

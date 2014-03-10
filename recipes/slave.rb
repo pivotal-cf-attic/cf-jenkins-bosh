@@ -46,8 +46,6 @@ file ::File.join(node['jenkins']['node']['home'], '.ssh', 'authorized_keys') do
   content node['cf_jenkins']['ssh_authorized_keys'].join("\n")
 end
 
-package 'redis-server'
-
 directory node['jenkins']['server']['home'] do
   owner node['jenkins']['node']['user']
   group node['jenkins']['node']['user']
