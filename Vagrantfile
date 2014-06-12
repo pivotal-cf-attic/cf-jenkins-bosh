@@ -127,7 +127,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       chef.add_recipe 'cf-jenkins::slave'
       chef.json = {
         'rubies' => {
-          'list' => ['ruby 1.9.3-p484'],
+          'list' => ['ruby 1.9.3-p484', 'ruby 2.1.1'],
           'install_bundler' => true
         },
         'chruby_install' => {
