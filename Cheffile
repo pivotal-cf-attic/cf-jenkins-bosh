@@ -11,4 +11,7 @@ cookbook 'selfsigned_certificate',
 
 cookbook 'jenkins', '1.2.2'
 
+cookbook 'cf-jenkins',
+  path: '.'
+
 cookbook 'chef_handler'

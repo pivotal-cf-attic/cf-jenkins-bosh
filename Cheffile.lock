@@ -10,6 +10,7 @@ SITE
     ark (0.9.0)
       7-zip (>= 0.0.0)
       windows (>= 0.0.0)
+    aws (2.5.0)
     bluepill (2.3.1)
       rsyslog (>= 0.0.0)
     build-essential (2.1.3)
@@ -73,7 +74,20 @@ GIT
       chruby_install (>= 0.0.0)
       ruby_install (>= 0.0.0)
 
+PATH
+  remote: .
+  specs:
+    cf-jenkins (0.0.2)
+      apt (>= 0.0.0)
+      aws (>= 0.0.0)
+      chef_handler (>= 0.0.0)
+      chruby_install (>= 0.0.0)
+      jenkins (= 1.2.2)
+      rubies (>= 0.0.0)
+      selfsigned_certificate (>= 0.0.0)
+
 DEPENDENCIES
+  cf-jenkins (>= 0)
   chef_handler (>= 0)
   chruby_install (>= 0)
   jenkins (= 1.2.2)
