@@ -1,17 +1,14 @@
-site 'http://community.opscode.com/api/v1'
+site 'https://supermarket.chef.io/api/v1'
 
-cookbook 'chef_rubies',
+cookbook 'rubies',
   git: 'https://github.com/ichilton/chef_rubies'
 
-cookbook 'chef_chruby_install',
+cookbook 'chruby_install',
   git: 'https://github.com/ichilton/chef_chruby_install'
 
 cookbook 'selfsigned_certificate',
   git: 'https://github.com/cgravier/selfsigned_certificate'
 
 cookbook 'jenkins', '1.2.2'
-
-cookbook 'cf-jenkins',
-  path: '.'
 
 cookbook 'chef_handler'
